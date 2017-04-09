@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		/*构造函数的继承方法*/
+		//声明父类
+		function superclass(id){
+			//引用类型共有属性
+			this.books=['html','css','js'];
+			//值类型共有属性
+			this.id=id;
+		} 
+		//父类的原型方法
+		superclass.prototype.showBooks=function(){
+			console.log(this.book);
+		}
+		//声明子类
+		function subclass(id){
+			//继承父类
+			superclass.call(this,id);
+		}
+		//创建子类实例
+		var a = new subclass('id-a');
+		var b = new subclass('id-b');
+		a.books.push('vue');
+		console.log(a.books); //html,css,js,vue
+		console.log(b.books); //html,css,js
+		console.log(a.id);
+		console.log(b.id);
+		a.showBooks(); //TypeError  报错
+		/*call这个方法可以更改函数的作用环境，在子类中对superclass调用call方法就是将子类中的
+		 变量在父类中执行一遍，由于父类中是给this绑定属性的因此子类自然也就继承了父类的共有属性
+		 由于这种类型的继承没有设计prototype所以父类的原型方法自然不会被子类继承，想要被子类继承必须
+		 放在构造函数中，这样创建出来的每个实例都会单独拥有一份而不能共用这样违背了代码的复用原则，为了综合
+		 这两种模式后来有了组合继承*/
+	</script>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		/*
+		 对于初学者来说在创建对象上不适应用new这种写法，所以经常容易忘记使用new而犯错误
+		 这节的代码可以让我们创建对象时有一种安全模式就完全可以解决你们的这类问题
+		 * */
+		var Book = function(title,time,type){
+			this.title = title;
+			this.time = time;
+			this.type = type;
+		}
+		var book = Book('javascript设计模式','2017','js');//实例化一个对象
+		console.log(book); //undefined 为什么会出现undefined
+		console.log(window.title); //javascript设计模式
+		console.log(window.time);//2017
+		console.log(window.type);//js
+		//因为上面的实例化对象的时候忘记用new关键字了
+		//new关键字的作用可以看作是对当前对象的this不停的赋值
+		//没有因为new而这个函数在全局变量中直接执行了所以打印book是undefined
+		
+		
+		//为了避免以上错误我们可以使用安全模式去是细化Book
+		var Book = function(title,time,type){
+			if(this instanceof Book){
+				this.title = title;
+				this.time = time;
+				this.type = type;
+			}else{
+				return new Book(title,time,type);
+			}
+		}
+		var book = Book('javascript设计模式','2017','js')
+		console.log(book); //Book
+		console.log(book.title);//javascript设计模式
+		//。。。。
+	</script>
+</html>

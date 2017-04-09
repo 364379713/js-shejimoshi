@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+	//闭包类的第一种写法因为添加原型属性和方法像是脱离了闭包这个类两个还可以写到一起
+		var Book = (function(){
+			var bookNum = 0; //静态私有变量
+			function checkBook(name){}//静态私有方法
+			//返回构造函数
+			return function(newId,newName,newPrice){
+				var name,price;//私有变量
+				function checkID(id){} //私有方法
+				this.getName=function(){};//特权方法
+				this.getPrice=function(){};//特权方法
+				this.setName=function(){};//特权方法
+				this.setPrice=function(){};//特权方法
+				this.id=newId//公有属性
+				this.copy=function(){};//公有方法
+				bookNum++;
+				if(bookNum>100)throw new Error('我们出版100本书')
+				//构造器
+				this.setName(name);
+				this.setPrice(price);
+			}
+		})();
+		Book.prototype={
+			//静态公有属性
+			isJsBook:false,
+			//静态公有方法
+			display:function(){}
+		};
+		
+		
+		//闭包和类类写到一起的写法第二种写法和第一种一样
+		var Book = (function(){
+			var bookNum = 0; //静态私有变量
+			function checkBook(name){}//静态私有方法
+			//返回构造函数
+			function _book (newId,newName,newPrice){
+				var name,price;//私有变量
+				function checkID(id){} //私有方法
+				this.getName=function(){};//特权方法
+				this.getPrice=function(){};//特权方法
+				this.setName=function(){};//特权方法
+				this.setPrice=function(){};//特权方法
+				this.id=newId//公有属性
+				this.copy=function(){};//公有方法
+				bookNum++;
+				if(bookNum>100)throw new Error('我们出版100本书')
+				//构造器
+				this.setName(name);
+				this.setPrice(price);
+			}
+			_book.prototype={
+				//静态公有属性
+				isJsBook:false,
+				//静态公有方法
+				display:function(){}
+			};
+			return _book;//最后返回这个类
+		})();
+		
+	</script>
+</html>

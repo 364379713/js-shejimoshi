@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		var Book = function(id,name,price){
+			var num = 1; 		//类的私有属性
+			function checkId(){}; //类的私有方法
+			this.getName=function(){};//特权方法
+			this.getPrice=function(){};//特权方法
+			this.setName=function(){};//特权方法
+			this.setPrice=function(){};//特权方法
+			this.id = id ; //对象共有属性
+			this.copy=function(){}; //对象的共有方法
+			this.setName(name);//构造器
+			this.setPrice(price);//构造器 
+		}
+		Book.ischinese = true; //类静态公有属性（对象不能访问）
+		Book.resetTime = function(){console.log('new Tiem')} //类静态公有方法（对象不能访问）
+		Book.prototype = {
+			isJsBook : false, //公有属性
+			display : function(){} //公有方法
+		}
+		var b = new Book('id-1','javascript设计模式',50);
+		console.log(b.num);
+		console.log(b.isJsBook);
+		console.log(b.id);
+		console.log(b.ischinese);
+		
+		//类的静态公有属性和静态公有方法可以通过类的自身访问
+		console.log(Book.ischinese);
+		Book.resetTime();
+		
+		
+	</script>
+</html>

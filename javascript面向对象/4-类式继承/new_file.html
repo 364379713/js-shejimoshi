@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		//声明父类
+		function superclass(){
+			this.superValue=true;
+		}
+		//为父类添加公有方法
+		superclass.prototype.getsuperValue=function(){
+			return this.superValue;
+		}
+		
+		//声明子类
+		function subclass(){
+			this.subValue=false;
+		}
+		//子类继承父类
+		subclass.prototype=new superclass();
+		//子类的公有方法
+		subclass.prototype.getsubValue=function(){
+			return this.subValue;
+		}
+		/* 注意这里子类继承父类必须写在子类的公有方法的上面否则会报错
+		 * 
+		 */
+		var instance = new subclass();
+		console.log(instance.getsuperValue()); //true
+		console.log(instance.getsubValue()); //false
+		
+		/*我们可以用instanceof来检测某个对象是否是某个类的实例
+		 * 
+		 */
+		console.log(instance instanceof superclass); //true
+		console.log(instance instanceof subclass); //true
+		console.log(subclass.prototype instanceof superclass); //true
+		
+		/*我们创建的所有对象都是Object的实例
+		 */
+		
+		
+		/*类式继承的两个缺点*/
+		//1由于子类是通过其原型prototype对父类进行实例化的所以父类中的共有属性要是引用类型
+		//就会在子类中被所有实例共用，因此一个子类的实例更改子类原型从父类构造函数中继承来的共有属性
+		//就会影响其他子类
+		function superclass1(){
+			this.books=['html','css','js'];
+		}
+		function subclass1(){}
+		subclass1.prototype = new superclass1();
+		var a = new subclass1();
+		var b = new subclass1();
+		console.log(a.books);  //"html,css,js"
+		console.log(b.books);  //"html,css,js"
+		a.books.push('设计模式');
+		console.log(b.books); //"html,css,js,设计模式"
+		
+		/*类式继承的第二个缺点是由于子类是通过prototype对父类的实例化实现的
+		 因此在实例化父类的时候也无法对父类构造函数内的属性进行初始化为了解决这个问题看下一节*/
+	</script>
+</html>

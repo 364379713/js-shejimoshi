@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		组合试继承
+	</body>
+	<script type="text/javascript">
+		//声明父类
+		function SuperClass(name){
+			this.name=name;//值类型共有属性
+			this.books=['html','css','js'];//引用类型的共有属性
+		}
+		SuperClass.prototype.getName=function(){
+			console.log(this.name);
+		}
+		//声明子类
+		function SubClass(name,time){
+			SuperClass.call(this,name);//构造函数式继承父类name属性
+			this.time=time;//子类中新增共有属性
+		}
+		//类试继承 子类原型继承父类
+		SubClass.prototype=new SuperClass();
+		//子类原型方法
+		SubClass.prototype.getTime=function(){
+			console.log(this.time);
+		} 
+		
+		//测试代码
+		var a = new SubClass("aName",2017);
+		a.books.push("设计模式");
+		console.log(a.books); //html,css,js,设计模式
+		a.getName(); //aName
+		a.getTime();//2017
+		
+		var b = new SubClass("bName",2016);
+		console.log(b.books);//html ,css,js
+		b.getName();//bName
+		b.getTime(); //2016
+		/*这种模式虽然组合了类式继承和构造函数继承两个的有点但是还不是完美的缺点在于
+		 * 我们在使用构造函数继承时执行了一遍父类的构造函数而在原型继承时又调用了一次
+		 * 父类的构造函数，因此父类构造函数调用了两遍，所以这个还不是完美的方式
+		 * 完美的方式原型式继承下一节
+		 */
+	</script>
+</html>

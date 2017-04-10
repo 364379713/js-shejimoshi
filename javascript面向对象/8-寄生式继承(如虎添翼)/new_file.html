@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		寄生式继承
+	</body>
+	<script type="text/javascript">
+		//声明父类
+		function inheritObject(o){
+			function F(){}//声明一个过渡函数对象
+			F.prototype=o;//过渡对象的原型继承父对象
+			return new F();
+		}
+		//声明基对象
+		var book = {
+			name:"bookName",
+			alikeBook:["html","css"]
+		}
+		function createBook(obj){
+			//通过原型继承方式创建新对象
+			var o = new inheritObject(obj);
+			o.getName=function(){
+				console.log(this.name);
+			};
+			return o;
+		}
+		
+		//测试代码
+		var a = new createBook(book);
+		var b = new createBook(book);
+		a.name="aName";
+		a.alikeBook.push("js");
+		console.log(a.name);  //aName
+		console.log(a.alikeBook); //html,css,js
+		
+		console.log(b.name); //bookName
+		console.log(b.alikeBook);//html,css,js
+		
+		console.log(book.name);//bookName
+		a.getName();//aName
+		b.getName();//bookName
+	</script>
+</html>

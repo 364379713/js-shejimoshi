@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		寄生组合式继承
+	</body>
+	<script type="text/javascript">
+		function inheritObject(o){
+			function F(){}//声明一个过渡函数对象
+			F.prototype=o;//过渡对象的原型继承父对象
+			return new F();
+		}
+		/*
+		 寄生式继承  继承原型
+		 传递参数 subClass   子类
+		 传递参数 superClass 父类
+		 * */
+		function inheritPrototype(subClass,superClass){
+			//复制一份父类的原型副本保存在变量中
+			var p = inheritObject(superClass.prototype);
+			//修正因为重写子类原型导致子类的constructor属性被修改
+			p.constructor = subClass;
+			subClass.prototype=p;
+		}
+		
+		//测试代码
+		//定义父类
+		function SuperClass(name){
+			this.name=name;
+			this.colors=["bab-red","bab-blue","bab-yellow"];
+		}
+		//定义父类的原型方法
+		SuperClass.prototype.getName=function(){
+			console.log(this.name);
+		}
+		
+		//定义子类
+		function SubClass(name,time){
+			SuperClass.call(this,name);//构造函数继承
+			this.time=time;
+		}
+		//寄生式继承父类原型
+		inheritPrototype(SubClass,SuperClass);
+		//子类新增原型方法
+		SubClass.prototype.getTime=function(){
+			console.log(this.time);
+		}
+		var a=new SubClass("aName",2017);
+		var b=new SubClass("bName",2016);
+		a.colors.push("black");
+		console.log(a.colors); //"bab-red,bab-blue,bab-yellow,black"
+		console.log(b.colors);//"bab-red,bab-blue,bab-yellow"
+		a.getName();//aName
+		a.getTime();//2017
+		b.getName();//bName
+		b.getTime();//2016
+	</script>
+</html>

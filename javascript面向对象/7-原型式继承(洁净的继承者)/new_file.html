@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		原型式继承
+	</body>
+	<script type="text/javascript">
+		function inheritObject(o){
+			function F(){}//声明一个过渡函数对象
+			F.prototype=o;//过渡对象的原型继承父对象
+			return new F();
+		}
+		
+		//测试代码
+		var book = {
+			name: "jsName",
+			alikeBook: ["css","html"]
+		}
+		var newBook = inheritObject(book);
+		newBook.name="newName";
+		newBook.alikeBook.push("xml");
+		
+		var otherBook = inheritObject(book);
+		otherBook.name="otherName";
+		otherBook.alikeBook.push("vue");
+		
+		console.log(newBook.name); //newName
+		console.log(newBook.alikeBook);//css,html,xml,vue
+		
+		console.log(otherBook.name);//otherName
+		console.log(otherBook.alikeBook);//css,html,xml,vue
+		
+		console.log(book.name);//jsName
+		console.log(book.alikeBook);//css,html,xml,vue
+		
+		/*跟类式继承一样，父类对象book中的值类型的属性(name)被复制引用类型的属性(alikeBook)
+		 * 被共用然而道格拉斯克罗克服的 推广的继承并不是这种而是在这种模式上增强推出了一种寄生式继承
+		 */
+	</script>
+</html>

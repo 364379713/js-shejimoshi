@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		安全的工厂方法
+	</body>
+	<script type="text/javascript">
+		//安全模式创建工厂类
+		var Factory = function(type,content){
+			if(this instanceof Factory){
+				var s = new this[type](content);
+				return s;
+			}else{
+				return new Factory(type,content);
+			} 
+		}
+		//工厂原型中设置创建所有类型数据对象的基类
+		Factory.prototype={
+			Java:function(content){
+				this.content=content;
+				console.log('Java'+this.content);
+			},
+			Js:function(content){
+				this.content=content;
+				console.log('js'+this.content);
+			},
+			Ui:function(content){
+				this.content=content;
+				console.log('ui'+this.content);
+			},
+			Php:function(content){
+				this.content=content;
+				console.log('php'+this.content);
+			}
+		}
+		var data = [{type:'A1',content:'--A11'},
+					{type:'B1',content:'--B22'}]
+		for(var i = 0 ;i<data.length;i++){
+			Factory(data[i].type,data[i].content);
+		}
+		/*这节代码有问题之后再说
+		 */
+	</script>
+</html>

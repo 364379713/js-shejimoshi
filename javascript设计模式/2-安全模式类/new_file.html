@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+	</body>
+	<script type="text/javascript">
+		//类
+		var Demo = function(){}
+		Demo.prototype={
+			show:function(){
+				console.log('成功获取');
+			}
+		}
+		var d = new Demo();
+		d.show(); //成功获取
+		var d = Demo();
+		//d.show();// Uncaugh TypeError：cannot read rp
+		
+		//安全模式类
+		var Demo1 = function(){
+			if(!(this instanceof Demo1)){
+				return new Demo1();
+			}
+		}
+		Demo1.prototype={ 
+			show:function(){
+				console.log('demo1');
+			}
+		}
+		var a = new Demo1();
+		a.show();
+		var b = Demo1()
+		b.show();
+		/*安全模式类式说可以屏蔽使用这对类的错误使用造成的错误比如一个类我们需要new关键
+		 * 字如果其他人不知道这个（Demo1）是一个类，使用时很可能忽略new关键字直接
+		 * var d= Demo1()这样会报错，为了避免报错所以采用了安全模式类下一节安全的工厂发放
+		 */
+	</script>
+</html>

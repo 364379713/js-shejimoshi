@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		多态
+	</body>
+	<script type="text/javascript">
+		function add(){
+			var arg = arguments,//获取参数
+			len = arg.length;
+			switch(len){
+				case 0: return 10;//如果没有参数
+				case 1: return 10 + arg[0];
+				case 2: return arg[0] + arg[1];
+			}
+		}
+		//当然我们还可以让其转化成更易懂的类形式
+		function Add(){
+			function zero(){ //无参数
+				return 10;
+			}
+			function one(num){ //一个参数
+				return 10+num;
+			}
+			function two(num1,num2){ //两个参数
+				return num1+num2;
+			}
+			
+			this.add=function(){
+				var arg = arguments,
+				len = arg.length;
+				switch(len){
+					case 0: return zero();
+					case 1: return one(arg[0]);
+					case 2: return two(arg[0],arg[1]);
+				}
+			}
+		}
+		var a=new Add();
+		console.log(a.add());
+		console.log(a.add(5));
+		console.log(a.add(6,7));
+		//对于多态类，当我们调用add运算方法时，他会根据传参不同做相应的处理
+	</script>
+</html>

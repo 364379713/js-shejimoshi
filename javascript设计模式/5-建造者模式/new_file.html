@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		建造者模式
+	</body>
+	<script type="text/javascript">
+		var Human = function(param){
+			//技能
+			this.skill = param&&param.skill||'保密';
+			//兴趣爱好
+			this.hobby = param&&param.hobby||'保密';
+		}
+		Human.prototype={
+			getSkill : function(){
+				return this.skill;
+			},
+			getHobby : function(){
+				return this.hobby;
+			}
+		}
+	</script>
+</html>

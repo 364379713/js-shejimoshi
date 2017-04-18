@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		<input type="" name="myInput" id="myInput" value="" />
+		<div id="box" style="width: 20px; height: 20px;"></div>
 	</body>
 	<script type="text/javascript">
 		//为页面文档添加一个点击事件
@@ -25,7 +26,7 @@
 		 级事件的浏览器就只能用onclick进行事件方法绑定事件为了实现完美的时间绑定方式我们
 		 使用了外观模式封装他们*/
 		
-		//外观模式
+		//外观模式封装添加事件
 		function addEvent(dom,type,fn){
 			//对于支持DOM2级事件处理程序addEventListener 方法
 			if(dom.addEventListener){
@@ -79,5 +80,31 @@
 				hideInputSug();
 			}
 		}
+		
+		//兼容浏览器是外观模式应用的一部分，很多代码库中通过外观模式来封装多个功能
+		//简化底层操作方法
+		var A = {
+			g: function(id){
+				return document.getElementById(id);
+			},
+			css:function(id,key,value){
+				document.getElementById(id).style[key] = value
+			},
+			attr:function(id,key,value){
+				document.getElementById(id)[key]=value;
+			},
+			html:function(id,html){
+				document.getElementById(id).innerHTML=html;
+			},
+			on:function(id,type,fn){
+				document.getElementById(id)['on'+type]=fn;
+			}
+		}
+		A.css('box','background','red');
+		A.attr('box','className','box');
+		A.html('box','这里是新添加的内容');
+		A.on('box','click',function(){
+			alert(111);
+		})
 	</script>
 </html>

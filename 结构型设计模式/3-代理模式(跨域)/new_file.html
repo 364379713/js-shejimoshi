@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		//当前域名www.xx.com
+//		$.Ajax({
+//			url : 'http://upload.xx.com/upload.php',
+//			success : function(res){
+//				//无法获取返回的数据
+//			}
+//			//控制台报错：XMLHttpRequest cannot load
+//			//NO 'Access-control-allow-orgin'
+//		})
+		
+		//站长统计
+		var Count = (function(){
+			//缓存图片
+			var img = new Image();
+			//返回统计函数
+			return function(param){
+				var str = 'http://www.count.com'
+				for(var i in param){
+					str += i+'='+param[i];
+				}
+				_img.src=src;
+			}
+		})()
+		
+		//jsonp跨域
+		//回调函数
+		function jsonpCallBack(res,req){
+			console.log(res,req);
+		}
+	</script>
+	<script src="http://localhost/test/jsonp.php?callback=jsonpCallBack&data=getJsonpData" type="text/javascript" charset="utf-8"></script>
+	<?php
+		$data = $_GET["data"];
+		$callback=$_GET["callback"];
+		echo $callback."('success','".$data."')"
+	?>
+	<script type="text/javascript">
+	
+	</script>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box">11</div>
+	</body>
+	<script type="text/javascript"> 
+		//适配器解决不同框架的的引用问题
+		//比如之前你用别的框架，后面想引入新的jquery框架
+		//之前写用的框架是不是需要用jquery重写一遍呢，所以要用到适配器
+		/*
+		 适配异类框架
+		 * */
+		//定义A框架
+		var A = {
+			g: function(id){
+				return document.getElementById(id);
+			},
+			css:function(id,key,value){
+				document.getElementById(id).style[key] = value
+			},
+			attr:function(id,key,value){
+				document.getElementById(id)[key]=value;
+			},
+			html:function(id,html){
+				document.getElementById(id).innerHTML=html;
+			},
+			on:function(id,type,fn){
+				document.getElementById(id)['on'+type]=fn;
+			}
+		}
+		A.on('box','click',function(){
+			console.log('A框架添加事件');
+		})
+		//现在我们想引入jquery来换原有的A库这样做
+		A.g=function(id){
+			return $(id).get(0);
+		}
+		A.on=function(id,type,fn){
+			var dom = typeof id ==='string'?$('#'+id):$(id);
+			dom.on(type,fn);
+		}
+		
+		//适配器还有很多用途，比如方法需要传递多个参数，
+		//但是记住这些参数的顺序是很困难，所以我们经常以一个参数对象方式传入
+		/*
+		 obj.name:name
+		 obj.title:title
+		 obj.age:age
+		 obj.color:color
+		 * */
+//		function doSomeThing(obj){};
+		function doSomeThing(obj){
+			var _adapter = {
+				name:'_name',
+				title:'_title',
+				age:'_age',
+				color:'_color'
+			}
+			for(var i in _adapter){
+				_adapter[i]=obj[i]||_adapter[i];
+			}
+			//或者extend(_adapter,obj);
+			console.log(_adapter.name)
+			console.log(_adapter.title)
+			console.log(_adapter.age)
+			console.log(_adapter.color)
+		}
+		doSomeThing({
+			title:'title'
+		});
+		/*数据适配*/
+		var arr = ['js','book','设计模式','2017']
+		//数组中的每个成员代表的意义不同，所以这种数据结构语义不是太好
+		var obj = {
+			name:'',
+			type:'',
+			title:'',
+			time:''
+		}
+		/*进行适配*/
+		function arrToObjAdapter(arr){
+			return {
+				name:arr[0],
+				type:arr[1],
+				title:arr[2],
+				data:arr[3]
+			}
+		}
+		var adapterData = arrToObjAdapter(arr);
+		console.log(adapterData);
+	</script>
+</html>

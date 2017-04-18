@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<input type="" name="myInput" id="myInput" value="" />
+	</body>
+	<script type="text/javascript">
+		//为页面文档添加一个点击事件
+		document.onclick=function(e){
+			e.preventDefault();
+			if(e.target !==document.getElementById('myinput')){
+				hidePageAlert();
+			}
+		}
+		function hidePageAlert(){
+			//隐藏提示框
+		}
+		/*首先你为document绑定了onclick事件，但是工厂里查看是DOM 0 级事件
+		 也就是团队中在有人用这种方式为document绑定click事件时会将你定义的click
+		 覆盖掉，所以这种方式很危险，因此我们应该用dom2级事件addEventListener实现
+		 然后老版本IE（低于9）不支持这个方法，所以要用attachEvent，当然如果有不支持DOM2
+		 级事件的浏览器就只能用onclick进行事件方法绑定事件为了实现完美的时间绑定方式我们
+		 使用了外观模式封装他们*/
+		
+		//外观模式
+		function addEvent(dom,type,fn){
+			//对于支持DOM2级事件处理程序addEventListener 方法
+			if(dom.addEventListener){
+				dom.addEventListener(type,fn,false);
+			}else if(dom.attachEvent){
+				dom.attachEvent('on'+type,fn);
+			}else{
+				dom['on'+type]=fn;
+			}
+		}
+		var myInput = document.getElementById('myInput');
+		addEvent(myInput,'click',function(){
+			console.log('绑定第一个事件');
+		})
+		addEvent(myInput,'click',function(){
+			console.log('绑定第二个事件')
+		})
+		/*除此之外IE低版本浏览器中不兼容e.preventDefault()和e.targer也可使用外观模式解决*/
+		//获取事件对象
+		var getEvent = function(event){
+			//标准浏览器返回event,IE下window.event
+			return event||window.event;
+		}
+		//获取元素
+		var getTarget = function(event){
+			var event = getEvent(event);
+			//标准浏览器
+			if(event.preventDefault){
+				event.preventDefault();
+			//IE浏览器
+			}else{
+				event.returnValue = false;
+			}
+		}
+		//阻止默认行为
+		var preventDefault = function(event){
+			var event = getEvent(event);
+			//标准浏览器
+			if(event.preventDefault){
+				event.preventDefault();
+				//IE浏览器
+			}else{
+				event.returnValue = false;
+			}
+		}
+		document.onclick=function(e){
+			//阻止默认行为
+			preventDefault(e);
+			//获取事件源目标对象
+			if(getTarget(e)!==document.getElementById('myInput')){
+				hideInputSug();
+			}
+		}
+	</script>
+</html>

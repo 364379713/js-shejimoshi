@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		单例模式 是只允许实例化一次的对象类
+		有时我们也用一个对象来规范一个命名空间
+		井井有条的管理对象上的属性与方法
+		单例模式常用来定义命名空间
+	</body>
+	<script type="text/javascript">
+		function g(id){
+			//
+		}
+		function css(id,key,value){
+			
+		}
+		function attr(id,key,value){
+			
+		}
+		/*这样当别人也创建css函数 attr函数怎么办
+		 * 所以要创建一个命名空间
+		 */
+		var Ming={
+			g:function(){
+				return document.getElementById(id);
+			},
+			css:function(id,key,value){
+				g(id).style[key] = value;
+			}
+		}
+		//在css方法中使用了g方法,单例模式要想使用定义的方法一定要加上命名空间Ming
+		//所以正确的写法是
+		var Ming={
+			g:function(){
+				return document.getElementById(id);
+			},
+			css:function(){
+				this.g(id).style[key]=value;
+			}
+		}
+		/*模块分明*/
+		//baidu.dom.addClass   //添加元素类
+		//baidu.dom.append     //插入元素
+		//baidu.event.stopPropagation //阻止冒泡
+		//baidu.event.preventDefault //阻止默认行为
+		//baidu.event.trim         //去除字符串空白字符
+		//baidu.string.encodeHTML  //将字符串进行html编码
+		
+		//创建一个小型代码库
+		var A = {
+			Util:{
+				util_method1:function(){},
+				util_method2:function(){}
+			},
+			Tool:{
+				tool_method1:function(){},
+				tool_method2:function(){}
+			},
+			Ajax:{
+				get:function(){},
+				post:function(){}
+			},
+			others:{
+				
+			}
+		}
+		//那么我们想使用公共模块,工具模块,ajax模块方法时就像下面这样
+		A.Util.util_method1();
+		A.Tool.tool_method2();
+		A.Ajax.get();
+		//单例模式可以用于管理静态变量
+		
+		var Conf=(function(){
+			var conf = {
+				MAX_NUM : 100,
+				MIN_NUM : 1,
+				COUNT : 1000
+			}
+			return { //这里只有取值器 没有赋值器所以相当于静态变量
+				get:function(name){
+					return conf[name]?conf[name]:null;
+				}
+			}
+		})();
+		console.log(Conf.get('MAX_NUM'));
+		
+		/*有些时候对于单例对象需要延迟创建,所以在单例中还存在一种延迟创建的形式，有人
+		 * 也称之为‘惰性创建’
+		 */
+		var LazySingle = (function(){
+			//单例实例引用
+			var _instance = null;
+			//单例
+			function Single(){
+				/*这里定义私有属性和方法*/
+				return {
+					publicMethod:function(){},
+					publicProperty:'1.0'
+				}
+			}
+			//获取单例对象接口
+			return function (){
+				if(!_instance){
+					_instance = Single();
+				}
+				return _instance;
+			}
+		})();
+		console.log(LazySingle().publicProperty) 
+	</script>
+</html>

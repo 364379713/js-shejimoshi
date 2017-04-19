@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="container"></div>
+		<button id="next_page">下一页</button>
+	</body>
+	<script type="text/javascript">
+		article=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
+		//新闻翻页功能
+//		var dom = null,//缓存创建的新闻标题元素
+//		paper = 0,//当前页数
+//		num = 5,//每页显示新闻数目
+//		i = 0,//创建新闻元素时保存变量 
+//		len = article.length;//新闻数据长度
+//		for(;i<len;i++){
+//			dom = document.createElement('div'); //创建包装新闻标题元素
+//			dom.innerHTML = article[i] //向元素中添加新闻标题
+//			if(i>=num){		//默认显示第一页
+//				dom.style.display='none';//超出第一页新闻隐藏
+//			}
+//			document.getElementById('container').appendChild(dom);//添加到页面中
+//		}
+//		//下一页绑定事件
+//		document.getElementById('next_page').onclick=function(){
+//			var div = document.getElementById('container').getElementsByTagName('div'),
+//			j=k=n=0;//j,k循环变量，n当前显示的第一个新闻序号
+//			n=++paper%Math.ceil(len/num)*num; //获取当前页显示的第一个新闻序号
+//			for(;j<len;j++){
+//				div[j].style.display='none'; //隐藏所有新闻
+//			}
+//			for(;k<5;k++){
+//				if(div[n+k])
+//					div[n+k].style.display='block'; //显示当前新闻
+//			}
+//		}
+		/*所有的新闻都有同样的结构,只是内容不同，所以你创建的几百条新闻同事插入页面并
+		 * 操作造成的多余的开销在低版本的IE浏览器中严重影响其性能，对于相同结构造成的多余开销
+		 * 问题你可以用享元模式来解决
+		 */
+		//享元对象
+		var Flyweight = function(){
+			//已创建的元素
+			var created = [];
+			//创建一个新闻包装容器
+			function create(){
+				var dom = document.createElement('div');
+				//将容器插入新闻列表容器中
+				document.getElementById('container').appendChild(dom);
+				//缓存新创建的元素
+				created.push(dom);
+				//返回创建的新元素
+				return dom;
+			}
+			return {
+				//获取创建新闻元素方法
+				getDiv : function(){
+					//如果已创建的元素小于当前页元素总个数，则创建
+					if(created.length<5){
+						return create();
+					}else{
+						//获取第一个元素,并插入最后面
+						var div = created.shift();
+						created.push(div);
+						return div;
+					}
+				}
+			} 
+		}();
+		/*实现需求，首先创建一个享元类，由于我们每页只能显示5条新闻，所以我们创建5个元素
+		 * 保存在享元类的内部，我们可以通过享元类为我们的提供的方法getDiv来获取创建的元素
+		 * 内部的数据和内部的方法提取出来之后我们就要实现外部的数据和外部的方法，外部的数据就是我
+		 * 们要显示的所有新闻内容，每个内容都不一样，所以他们不能被共享。当然。为下一页绑定的事件
+		 * 是独立的它只绑定一次。然后我们要做两件事情，第一件事情，我们要根据新闻的内容
+		 * 实例化页面，第二件事情，对下一页绑定一个点击事件，显示下一页，显示过程中我们可以优化一个
+		 * 策略，就是如果当前显示的新闻数据不够5条。那么我们可以在所有新闻数据中起始处获取，
+		 * 这样就要求我们新闻数据的总条数大于页面最多显示的条数--5条，首先我们先初始化页面
+		 */
+		var paper = 0,
+		num=5, 
+		len=article.length;//18
+		//添加5条新闻
+		for(var i = 0;i<5;i++){
+			if(article[i]){
+				Flyweight.getDiv().innerHTML = article[i];
+			}
+			//通过享元类获取创建的元素并写入新闻内容
+			
+		}
+		//下一页按钮绑定事件
+		document.getElementById('next_page').onclick = function(){
+			//如果新闻内容不租5条则返回
+			if(article.length<5)
+				return;
+			var n = ++paper*num%len, //获取当前页的第一条新闻索引
+			j=0;
+			//插入5条新闻
+			for(;j<5;j++){
+				//如果存在第n+j条则插入
+				if(article[n+j]){
+					Flyweight.getDiv().innerHTML = article[n+j];
+					//否则插入其实位置第 n+j-len条
+				}else if(article[n+j-len]){
+					Flyweight.getDiv().innerHTML = article[n+j-len];
+					//如果不存在则插入空字符串
+					console.log(2);
+				}else{
+					Flyweight.getDiv().innerHTML=" "; 
+				}
+				
+			}
+		}
+		
+		/*我们在面向对象编程上还是很常用的比如说一个游戏中我们可以创建一些人
+		 ，精灵等角色，那么他们都会有运动这个动作，其实这一动作在所有角色中
+		 实现的方式都是相同的。对此我们可以创建一个通用的享元类，让它实现横向移动
+		 以及纵向移动*/
+		//享元动作
+		var FlyWeight1 = {
+			moveX:function(x){
+				this.x=x;
+			},
+			moveY:function(y){
+				this.y=y;
+			}
+		}
+		//其他任何角色都可以通过继承的方式来实现这些方法，比如让人继承移动方法
+		var Player=function(x,y,c){
+			this.x=x;
+			this.y=y;
+			this.color=c;
+		}
+		Player.prototype=FlyWeight1;
+		Player.prototype.changeC=function(c){
+			this.color=c;
+		}
+		//让精灵继承移动的方法
+		var Spirit = function(x,y,r){
+			this.x=x;
+			this.y=y;
+			this.r=r;
+		}
+		Spirit.prototype=FlyWeight1;
+		Spirit.prototype.changeR=function(r){
+			this.r=r;
+		}
+		//那么我们创建一个人
+		var player1=new Player(5,6,'red');
+		console.log(player1);
+		player1.moveX(6);
+		player1.moveY(7);
+		player1.changeC('pink');
+		console.log(player1);
+	</script>
+</html>
